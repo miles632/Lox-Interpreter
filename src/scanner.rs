@@ -90,6 +90,13 @@ impl Scanner {
             }
 
             '/' => {
+                if self.double_c_match('/') {
+                    while self.peek() != '\n' && !self.source_idx_end() {
+                        self.advance();
+                    } 
+                } else {
+                    self.add_token_literal(TokenType::Slash, None)
+                }
             }
 
             ' ' | '\r' | '\t' => (),
@@ -99,7 +106,23 @@ impl Scanner {
             }
 
             '"' => {
+                while !self.source_idx_end() && self.peek() != '"' {
+                    if self.peek() == '\n' {
+                            self.line+=1;
+                        }
+                        self.advance();
+                }
 
+                if self.source_idx_end() {
+                    todo!()
+                }
+
+                self.add_token_literal(
+                    TokenType::String, 
+                    Some(Literal::Str(
+                        String::from_utf8(self.source[self.start + 1..self.current - 1].to_vec()).unwrap()
+                    ))
+                );
             }
 
             _ => {
