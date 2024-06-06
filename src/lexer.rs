@@ -41,7 +41,7 @@ impl Lexer {
                 ("for", TokenType::For),
                 ("fun", TokenType::Fun),
                 ("if", TokenType::If),
-                ("nil", TokenType::Nil),
+                ("nil", TokenType::Null),
                 ("or", TokenType::Or),
                 ("print", TokenType::Print),
                 ("return", TokenType::Return),
@@ -82,7 +82,7 @@ impl Lexer {
 
             '!' => {
                 if self.double_c_match('=') {
-                    self.add_token_literal(TokenType::BangEqual, None);
+                    self.add_token_literal(TokenType::BangEq, None);
                 } else {
                     self.add_token_literal(TokenType::Bang, None);
                 }
@@ -90,15 +90,15 @@ impl Lexer {
 
             '=' => {
                 if self.double_c_match('=') {
-                    self.add_token_literal(TokenType::EqualEqual, None);
+                    self.add_token_literal(TokenType::EqEq, None);
                 } else {
-                    self.add_token_literal(TokenType::Equal, None);
+                    self.add_token_literal(TokenType::Eq, None);
                 } 
             }
 
             '<' => {
                 if self.double_c_match('=') {
-                    self.add_token_literal(TokenType::LessEqual, None);
+                    self.add_token_literal(TokenType::LessEq, None);
                 } else {
                     self.add_token_literal(TokenType::Less, None);
                 }  
@@ -106,7 +106,7 @@ impl Lexer {
 
             '>' => {
                 if self.double_c_match('=') {
-                    self.add_token_literal(TokenType::GreaterEqual, None);
+                    self.add_token_literal(TokenType::GreaterEq, None);
                 } else {
                     self.add_token_literal(TokenType::Greater, None);
                 }  
@@ -279,9 +279,9 @@ mod scantest {
 
         scanner.scan_tokens(str);
 
-        assert_eq!(scanner.tokens[0].ttype, TokenType::GreaterEqual);
+        assert_eq!(scanner.tokens[0].ttype, TokenType::GreaterEq);
         assert_eq!(scanner.tokens[1].ttype, TokenType::Comma);
-        assert_eq!(scanner.tokens[2].ttype, TokenType::BangEqual);
+        assert_eq!(scanner.tokens[2].ttype, TokenType::BangEq);
     }
 
     #[test]

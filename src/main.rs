@@ -6,11 +6,12 @@ use std::io;
 use std::env::{args, Args};
 use std::env;
 
-use scanner::Scanner;
 
-pub mod scanner;
+pub mod lexer;
 pub mod error_formatting;
 pub mod token;
+pub mod parser;
+pub mod expr;
 
 
 // static mut HAD_ERROR: bool = false;

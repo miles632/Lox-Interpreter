@@ -22,13 +22,13 @@ pub enum TokenType {
 
     // one or two char
     Bang,
-    BangEqual,
-    Equal,
-    EqualEqual,
+    BangEq,
+    Eq,
+    EqEq,
     Greater,
-    GreaterEqual,
+    GreaterEq,
     Less,
-    LessEqual,
+    LessEq,
 
     // literals
     Identifier,
@@ -44,7 +44,7 @@ pub enum TokenType {
     Fun,
     For,
     If,
-    Nil,
+    Null,
     Or,
     Print,
     Return,

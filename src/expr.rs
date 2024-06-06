@@ -12,12 +12,16 @@ pub enum Stmt {
 #[non_exhaustive]
 pub enum Expr {
     Literal(Literal),
-    Unary(UnaryOp, Box<Expr>),
-    Binary(BinaryOp, Box<(Expr, Expr)>),
+    Unary(Unary, Box<Expr>),
+    Binary(Binary, Box<(Expr, Expr)>),
     Grouping(Box<Expr>),
+    Variable(Iden),
+    Assignment(Iden, Box<Expr>),
+    List(Vec<Box<Expr>>),
+    
 }
 
-enum Literal {
+pub enum Literal {
     String(String),
     Number(f64),
     True,
@@ -25,13 +29,18 @@ enum Literal {
     Null
 }
 
-enum UnaryOp {
+pub enum UnaryOp {
     Minus, 
-    Plus
+    Bang
 }
 
-enum BinaryOp {
-    EqEq,
+pub struct Unary {
+    pub line: usize,
+    pub ty: UnaryOp
+}
+
+pub enum BinaryOp {
+    Equal,
     UnEq, 
     Less,
     LessEq,
@@ -43,4 +52,16 @@ enum BinaryOp {
     Div, 
 }
 
-struct Source { line: usize, col: usize }
+pub struct Binary {
+    pub line: usize,
+    pub ty: BinaryOp
+}
+
+
+pub struct Source { line: usize, col: usize }
+
+pub struct Iden { 
+    pub line: usize, 
+    // col: usize, 
+    pub str: String
+}
