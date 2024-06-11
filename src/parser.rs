@@ -26,9 +26,9 @@ enum ParseErr {
         found: TType,
         message: Option<String>,
     },
-    MaxParamsExceeded {
-        line: usize,
-    }
+    // MaxParamsExceeded {
+    //     line: usize,
+    // }
 }
 
 struct Parser {
@@ -45,8 +45,107 @@ impl Parser {
     } 
 
     fn parse(&mut self) -> Result<Vec<Stmt>, ParseErr>{
+        let mut stmts = vec![];
+
+        while !self.idx_at_end() {
+            let stmt = self.declaration()?;
+            stmts.push(stmt);
+        }
+    }
+
+    fn declaration(&mut self) -> Result<Stmt, ParseErr> {
+        if self.matches_o(TType::Fun)  {
+            return self.
+        }
+
+        if self.matches_o(TType::Fun) {
+
+        }
+    }
+
+    fn statement(&mut self) -> Result<Stmt, ParseErr> {
+        if self.matches_o(TType::If) { return Ok(self.if_stmt()); }
+        if self.matches_o(TType::For) { return Ok(self.for_stmt()); }
+        if self.matches_o(TType::While) { return Ok(self.while_stmt()); }
+        if self.matches_o(TType::Return) { return Ok(self.return_stmt()); }
+        if self.matches_o(TType::Print) { return Ok(self.print()); }
+    }
+
+    fn var(&mut self) -> Result<Stmt, ParseErr> {
+        let iden_token = *self.consume(TType::Identifier, "function contains no identifier")?;
+        let fn_iden = expr::Iden {
+            line: iden_token.line,
+            str: String::from_utf8(iden_token.lexeme).unwrap(),
+        };
+
+        let 
+    }
+
+    fn fun(&mut self) -> Result<Stmt, ParseErr> {
+
+    }
+
+    fn args(&mut self) -> Result<Vec<Iden>, ParseErr> {
+        let mut args = vec![];
+
+        self.consume(TType::LeftParen, "left parenthesis for arguments missing in function signature")?;
+        if !self.check(TType::RightParen) {
+            loop {
+                let arg = self.consume(TType::Identifier, "expected identifier")?; 
+
+                let arg_iden = expr::Iden {
+                    line: arg.line,
+                    str: String::from_utf8(arg.lexeme).unwrap(),
+                };
+
+                args.push(arg_iden);
+                
+                if !self.matches_o(TType::Comma) { break }
+            }
+        }
+
+        assert!(self.check(TType::RightParen));
+        self.consume(TType::RightParen, "expected ( after arguments")?;
+
+        Ok(args)
+    }
+
+    fn fun_body(&mut self) -> Result<Vec<Stmt>, ParseErr> {
+        self.consume(TType::LeftBrace, "function has no { before function body");
+
+        let mut stmts = vec![];
+
+        while !self.check(TType::RightBrace) && !self.idx_at_end(){
+            stmts.push(self.declaration()?);
+        }
+
+        self.consume(TType::RightBrace, "function body isn't terminated with {")
+
+        Ok(stmts)
+    }
+
+
+    //****STATEMENTS */
+    fn if_stmt(&mut self) -> Result<Stmt, ParseErr> {
         unimplemented!()
     }
+
+    fn for_stmt(&mut self) -> Result<Stmt, ParseErr> {
+        unimplemented!()
+    }
+
+    fn while_stmt(&mut self) -> Result<Stmt, ParseErr> {
+        unimplemented!()
+    }
+
+    fn return_stmt(&mut self) -> Result<Stmt, ParseErr> { 
+        unimplemented!()
+    }
+
+    fn print_stmt(&mut self) -> Result<Stmt,ParseErr> {
+        unimplemented!()
+    }
+    //**** */
 
     fn expression(&mut self) -> Result<Expr, ParseErr> {
         // equality()
